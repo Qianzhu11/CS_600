@@ -1,12 +1,14 @@
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import java.util.*;
+import java.util.Scanner;
 
 public class Test {
 
 	public static void main(String[] args) {
-		String s = "abc  def ghi";
-		System.out.println(s.split(" "));
+		 Scanner s = new Scanner(System.in); 
+         System.out.println("ÇëÊäÈë×Ö·û´®£º"); 
+         while (true) { 
+                 String line = s.nextLine(); 
+                 if (line.equals("exit")) break; 
+                 System.out.println(line); 
+         } 
 	}
 }
