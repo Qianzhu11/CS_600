@@ -1,43 +1,81 @@
-
+import java.util.*;
+ 
 public class Trie {
-    static final int ALPHABET_SIZE = 26;
-    static TrieNode root;
-
-    static class TrieNode {
-        TrieNode[] children = new TrieNode[26];
-        boolean isEndOfWord;
-
-        TrieNode() {
-            isEndOfWord = false;
-            for (int i = 0; i < ALPHABET_SIZE; i++) children[i] = null;
+    private TrieNode root;
+    
+    public Trie() {
+        root = new TrieNode(' '); 
+    }
+ 
+    public void insert(String word) {
+        if (search(word) == true) 
+            return;        
+        TrieNode current = root; 
+        for (char ch : word.toCharArray()) {
+            TrieNode child = current.subNode(ch);
+            if (child != null)
+                current = child;
+            else {
+                 current.childList.add(new TrieNode(ch));
+                 current = current.subNode(ch);
+            }
+            current.count++;
         }
+        current.isEnd = true;
+    }
+    
+    public boolean search(String word) {
+        TrieNode current = root;  
+        for (char ch : word.toCharArray() ) {
+            if (current.subNode(ch) == null)
+                return false;
+            else
+                current = current.subNode(ch);
+        }      
+        if (current.isEnd == true) return true;
+        return false;
     }
 
-    static void insert(String key) {
-        int level;
-        int length = key.length();
-        int index;
-        TrieNode pCrawl = root;
-
-        for (level = 0; level < length; level++) {
-            index = key.charAt(level) - 'a';
-            if (pCrawl.children[index] == null) pCrawl.children[index] = new TrieNode();
-            pCrawl = pCrawl.children[index];
+    public void remove(String word) {
+        if (search(word) == false) {
+            System.out.println(word +" does not exist in trie\n");
+            return;
+        }             
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) { 
+            TrieNode child = current.subNode(ch);
+            if (child.count == 1) {
+                current.childList.remove(child);
+                return;
+            } 
+            else {
+                child.count--;
+                current = child;
+            }
         }
-        pCrawl.isEndOfWord = true;
+        current.isEnd = false;
     }
+}
+    
 
-    static boolean search(String key) {
-        int level;
-        int length = key.length();
-        int index;
-        TrieNode pCrawl = root;
+class TrieNode {
+    char content; 
+    boolean isEnd; 
+    int count;  
+    LinkedList<TrieNode> childList; 
+ 
 
-        for (level = 0; level < length; level++) {
-            index = key.charAt(level) - 'a';
-            if (pCrawl.children[index] == null) return false;
-            pCrawl = pCrawl.children[index];
-        }
-        return (pCrawl != null && pCrawl.isEndOfWord);
+    public TrieNode(char c) {
+        childList = new LinkedList<TrieNode>();
+        isEnd = false;
+        content = c;
+        count = 0;
+    }  
+    public TrieNode subNode(char c) {
+        if (childList != null)
+            for (TrieNode eachChild : childList)
+                if (eachChild.content == c)
+                    return eachChild;
+        return null;
     }
 }

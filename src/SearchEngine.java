@@ -1,6 +1,8 @@
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.io.*;
 
 public class SearchEngine {
@@ -33,8 +35,20 @@ public class SearchEngine {
 	 */
 	private Map<String, ArrayList<Integer>> invertedFile = new HashMap<String, ArrayList<Integer>>();
 	
+	public void insertToTrie() {
+		
+	}
+	
 	public static void main(String[] args) {
 		SearchEngine se = new SearchEngine();
+		Document doc = se.l.loadPage("https://www.stevens.edu/news");
+		Elements p = doc.select("p");
+		String s = p.get(2).toString().toLowerCase();
+		s = s.substring(3, s.length() - 5);
+		String[] li = s.replaceAll("^[.,\\s]+", "").split("[.,\\s]+");
+		for (String s1 : li) {
+			System.out.println(s1);
+		}
 	}
 }
 
